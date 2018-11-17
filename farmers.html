@@ -1,0 +1,190 @@
+<!DOCTYPE html5>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Voice and text</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+    <div class="container" background-image="download.jpeg">
+
+        <h1>Farmer Assistant</h1>
+        <!-- <p class="page-description">A tiny app that allows you to ask queries</p> -->
+
+
+        <h3 class="no-browser-support">Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This Demo In Google Chrome.</h3>
+
+        <div class="app">
+            <h3>Add New Note</h3>
+            <div class="input-single">
+                <textarea id="note-textarea" placeholder="Create a new note by typing or using voice recognition." rows="6"></textarea>
+            </div>
+            <button class="btn btn-primary" id="start-record-btn" title="Start Recording">Start recording</button>
+            <button class="btn btn-primary" id="pause-record-btn" title="Pause Recording">Pause Recording</button>
+            <button class="btn btn-primary" id="save-note-btn" title="Save Note">send node</button>
+            <p id="recording-instructions">Press the
+                <strong>Start Recording</strong> button and allow access.</p>
+
+            <h3>Response</h3>
+            <ul id="response">
+                <li>
+                    <p class="no-notes">You don't have any query.</p>
+                </li>
+            </ul>
+
+        </div>
+        <audio id="recordedAudio"></audio>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <script src="script.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+    <!-- Only used for the demos ads. Please ignore and remove. -->
+    <script src="https://cdn.tutorialzine.com/misc/enhance/v3.js" async></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        // $(document).ready(function () {
+
+        //     $('form').on('submit', function (event) {
+        //         $.ajax({
+        //             data: {
+        //                 TextToAnalyse: $('#TextToAnalyse').val(),
+        //             },
+        //             type: 'POST',
+        //             url: '/getnlpscore',
+        //             success: function (result) {
+        //                 console.log(result);
+        //             },
+        //             error: function (err) {
+        //                 console.log(err.statusText);
+        //             }
+        //         })
+        //             .done(function (data) {
+        //                 if (data.error) {
+        //                     // console.log("error: ", data.error);
+        //                     // $('#errorAlert').text(data.error).show();
+        //                     // $('#successAlert').hide();
+        //                 }
+        //                 else {
+
+        //                     // console.log("success: ", data.name);
+        //                     let html_response = '<h3>RESPONSE</h3><p>Sentiment : ' + data.sentiment + '<br/>Confidence : ' + data.confidence + '<br/>Text : ' + data.text + '</p>';
+        //                     $('#result_sentiment').html(html_response);
+        //                     $('#result_sentiment').css("display", "block");
+        //                     // $('#successAlert').text(JSON.stringify(data)).show();
+        //                     // $('#errorAlert').hide();
+        //                 }
+
+        //             });
+
+        //         event.preventDefault();
+
+        //     });
+
+        // });
+
+
+        
+        navigator.mediaDevices.getUserMedia({ audio: true,video:false })
+            .then(stream => {
+                const mime = ['audio/wav', 'audio/mpeg', 'audio/webm', 'audio/ogg']
+                .filter(MediaRecorder.isTypeSupported)[0];
+                const mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: mime
+                });
+
+                let start = document.getElementById("start-record-btn")
+                let stop = document.getElementById("pause-record-btn")
+                let recorded = document.getElementById("recordedAudio")
+                let chunks = []
+                start.addEventListener('click', (ev) => {
+                    mediaRecorder.start();
+                    console.log("start")
+                });
+                stop.addEventListener('click', (ev) => {
+                    mediaRecorder.stop();
+                    console.log("stop")
+                    console.log(mediaRecorder.state);
+                });
+                mediaRecorder.ondataavailable = function (ev) {
+                    chunks.push(ev.data);
+                    // console.log();
+                }
+                mediaRecorder.onstop = (ev) => {
+                    // let blob = new Blob(chunks, { 'type': 'audio/wav; codecs=MS_PCM' });
+                    let blob = new Blob(chunks, { 'type': 'audio/x-wav;' });
+
+                    // 0
+                    recorded.src = URL.createObjectURL(blob)
+                    console.log(blob);
+                    recorded.controls = true;
+                    recorded.autoplay = true;
+                    chunks = []
+                    let data = new FormData();
+                    data.append('file', blob)
+                    console.log(data)
+                    $.ajax({
+                        // url: "https://d0c97f7c.ngrok.io/post/",
+                        // url: "http://127.0.0.1:8000/speechtotext/",   
+                        url: "http://127.0.0.1:8000/post/",                        
+
+                        type: "POST",
+                        data: data,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data);
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    }) .done(function (data) {
+                        if (data.error) {
+                            // console.log("error: ", data.error);
+                            // $('#errorAlert').text(data.error).show();
+                            // $('#successAlert').hide();
+                        }
+                        else {
+
+                            console.log("success: ", data.name);
+                            // let html_response = '<h3>RESPONSE</h3><p>Sentiment : ' + data.sentiment + '<br/>Confidence : ' + data.confidence + '<br/>Text : ' + data.text + '</p>';
+                            // $('#result_sentiment').html(html_response);
+                            // $('#result_sentiment').css("display", "block");
+
+                            
+                            // $('#successAlert').text(JSON.stringify(data)).show();
+                            // $('#errorAlert').hide();
+                        }
+
+                    });
+                }
+            });
+    </script>
+   <script>
+    $("#save-note-btn").click(function () {
+            var text = $("#note-textarea").val();
+            $.post('http://127.0.0.1:5000/ind', { 'text': text }, function (data, status) {
+                console.log(status)
+                console.log(data)
+            });
+        });
+    </script>
+</body>
+
+</html>
