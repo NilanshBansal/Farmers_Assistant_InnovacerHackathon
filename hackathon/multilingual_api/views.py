@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import numpy as np
 from keras.models import model_from_json
+
 import pickle
 from googletrans import Translator
 import sys
@@ -114,6 +115,15 @@ def translate_iniatial(text, g_code):
 
 @csrf_exempt
 def text(request):
+    import numpy as np
+    from keras.models import model_from_json
+    import pickle
+    from googletrans import Translator
+    import sys
+    import os
+    import io
+    import pandas as pd
+
     if request.method == 'POST':
         if request.POST['content_type'] == 'speech':
             lang_code = request.POST['lang_code']
@@ -161,7 +171,7 @@ def text(request):
             }
             return JsonResponse(response)
 
-        if request.POST['content_type'] == 'text':
+        elif request.POST['content_type'] == 'text':
 
             input_text = request.POST['text_input']
             print(input_text)
