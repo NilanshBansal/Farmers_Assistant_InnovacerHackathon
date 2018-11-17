@@ -1,0 +1,10 @@
+language,g_code,model_code,speech_code
+English,en,eng,en-IN
+Hindi,hi,hin,hi-IN
+Hindi,hi,mai,hi-IN
+Marathi,mr,mar,mr-IN
+Gujarati,gu,guj,gu-IN
+Tamil,ta,tam,ta-IN
+Kannada,kn,tcy,	kn-IN
+Telugu,te,tel,te-IN
+Bengali,bn,ben,bn-IN

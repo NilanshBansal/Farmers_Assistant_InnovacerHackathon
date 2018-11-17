@@ -75,26 +75,6 @@ def postout(request):
 
 
 
-# if __name__ == '__main__':
-#     file_name = 'audio_converted.wav'
-
-#     # Loads the audio into memory
-#     with io.open(file_name, 'rb') as audio_file:
-#         content = audio_file.read()
-
-#     transcript = stt(content)
-#     print("TRANSCRIPT: ",transcript)
-#     df = []
-
-#     with io.open('transcript3_new1.txt', 'w') as text_file:
-#         text_file.write(transcript)
-
-
-
-
-
-
-
 # Create your views here.
 
 # @csrf_exempt
