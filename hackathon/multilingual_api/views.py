@@ -125,6 +125,8 @@ def text(request):
     import pandas as pd
 
     if request.method == 'POST':
+        server_url = 'http://4faff15e.ngrok.io/main/'
+
         if request.POST['content_type'] == 'speech':
             lang_code = request.POST['lang_code']
             data = request.FILES.get('file')
@@ -163,7 +165,7 @@ def text(request):
             # bot_input = bot_input.replace('pomegrenate', 'pomegrenate')
             # bot output
 
-            url = "http://4faff15e.ngrok.io/main/" + bot_input
+            url = server_url + bot_input
             output = requests.get(url)
             bot_output = output.text
             # get g_code
@@ -188,7 +190,7 @@ def text(request):
             # bot_input = bot_input.replace('pomegrenate', 'pomegrenate')
             # bot output
 
-            url = "http://4faff15e.ngrok.io/main/" + bot_input
+            url = server_url + bot_input
             output = requests.get(url)
             bot_output = output.text
             # get g_code
