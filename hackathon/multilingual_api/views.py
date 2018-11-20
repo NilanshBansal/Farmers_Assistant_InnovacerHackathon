@@ -146,8 +146,11 @@ def text(request):
                 content = audio_file.read()
 
             transcript = stt(content, lang_code=lang_code)
-            print("TRANSCRIPT: ", transcript)
-
+            if transcript is not None:
+                print("TRANSCRIPT: ", transcript)
+            else:
+                print("TRANSCRIPT IS NONE:")
+                return JsonResponse({"text_response":"Voice not detected!"})
             # f.write(request.FILES.get('file'))
             # print(f.read())
             # f.close()
@@ -159,7 +162,8 @@ def text(request):
             # bot_input = bot_input.replace('rodent', 'rodents')
             # bot_input = bot_input.replace('pomegrenate', 'pomegrenate')
             # bot output
-            url = "http://c9740d11.ngrok.io/main/"+bot_input
+
+            url = "http://4faff15e.ngrok.io/main/" + bot_input
             output = requests.get(url)
             bot_output = output.text
             # get g_code
@@ -183,7 +187,8 @@ def text(request):
             # bot_input = bot_input.replace('rodent', 'rodents')
             # bot_input = bot_input.replace('pomegrenate', 'pomegrenate')
             # bot output
-            url = "http://c9740d11.ngrok.io/main/"+bot_input
+
+            url = "http://4faff15e.ngrok.io/main/" + bot_input
             output = requests.get(url)
             bot_output = output.text
             # get g_code
@@ -191,6 +196,7 @@ def text(request):
             # translated initial input
             translate_init = translate_iniatial(bot_output, g_code)
             response = {
+                "model_code": model_code,
                 "text_response": translate_init
             }
             return JsonResponse(response)
