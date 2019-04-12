@@ -125,7 +125,7 @@ def text(request):
     import pandas as pd
 
     if request.method == 'POST':
-        server_url = 'http://4faff15e.ngrok.io/main/'
+        server_url = 'https://259d155e.ngrok.io/main/'
 
         if request.POST['content_type'] == 'speech':
             lang_code = request.POST['lang_code']
@@ -158,8 +158,10 @@ def text(request):
             # f.close()
 
             model_code = predict_lang(transcript)
+            print('model code: ',model_code)
             # translated input
             bot_input = translate_input(transcript)
+            print('Translated output: ',bot_input)
             # bot_input = bot_input.lower()
             # bot_input = bot_input.replace('rodent', 'rodents')
             # bot_input = bot_input.replace('pomegrenate', 'pomegrenate')
@@ -172,6 +174,7 @@ def text(request):
             g_code = map_g_code(model_code)
             # translated initial input
             translate_init = translate_iniatial(bot_output, g_code)
+            print('CHATBOT OUPUT: ',translate_init)
             response = {
                 "text_response": translate_init
             }
@@ -183,8 +186,10 @@ def text(request):
             print(input_text)
             # model code
             model_code = predict_lang(input_text)
+            print('model code: ',model_code)
             # translated input
             bot_input = translate_input(input_text)
+            print('Translated output: ',bot_input)
             # bot_input = bot_input.lower()
             # bot_input = bot_input.replace('rodent', 'rodents')
             # bot_input = bot_input.replace('pomegrenate', 'pomegrenate')
@@ -197,6 +202,7 @@ def text(request):
             g_code = map_g_code(model_code)
             # translated initial input
             translate_init = translate_iniatial(bot_output, g_code)
+            print('CHATBOT OUPUT: ',translate_init)
             response = {
                 "model_code": model_code,
                 "text_response": translate_init
