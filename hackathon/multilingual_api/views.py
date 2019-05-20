@@ -164,7 +164,7 @@ def text(request):
             # bot_input = bot_input.replace('rodent', 'rodents')
             # bot_input = bot_input.replace('pomegrenate', 'pomegrenate')
             # bot output
-
+            print(bot_input)
             url = server_url + bot_input
             output = requests.get(url)
             bot_output = output.text
@@ -185,6 +185,7 @@ def text(request):
             model_code = predict_lang(input_text)
             # translated input
             bot_input = translate_input(input_text)
+            print(bot_input)
             # bot_input = bot_input.lower()
             # bot_input = bot_input.replace('rodent', 'rodents')
             # bot_input = bot_input.replace('pomegrenate', 'pomegrenate')
